@@ -1,0 +1,7 @@
+category_id,category_name,nature,sort_order
+REV,Receita de serviços,Receita,1
+DIR,Custos diretos,Despesa,2
+PES,Pessoal,Despesa,3
+TEC,Tecnologia,Despesa,4
+COM,Comercial,Despesa,5
+ADM,Administrativo,Despesa,6
