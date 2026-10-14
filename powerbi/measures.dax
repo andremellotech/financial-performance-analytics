@@ -1,0 +1,73 @@
+// Medidas da tabela Financas; dados fictícios em BRL.
+
+Receita realizada = CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Realizado", Categorias[CategoriaId] = "REV")
+
+Receita orçada = CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Orçado", Categorias[CategoriaId] = "REV")
+
+Gastos realizados = -CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Realizado", Categorias[Natureza] = "Despesa")
+
+Gastos orçados = -CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Orçado", Categorias[Natureza] = "Despesa")
+
+Resultado realizado = CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Realizado")
+
+Resultado orçado = CALCULATE(SUM(Financas[Valor]), Financas[Cenario] = "Orçado")
+
+Margem realizada = DIVIDE([Resultado realizado], [Receita realizada])
+
+Margem orçada = DIVIDE([Resultado orçado], [Receita orçada])
+
+Desvio do resultado = [Resultado realizado] - [Resultado orçado]
+
+Desvio percentual = DIVIDE([Desvio do resultado], ABS([Resultado orçado]))
+
+Resultado ano anterior = IF(HASONEVALUE(Calendario[Ano]), CALCULATE([Resultado realizado], DATEADD(Calendario[Data], -1, YEAR)))
+
+Variação anual = VAR Anterior = [Resultado ano anterior] RETURN IF(NOT ISBLANK(Anterior), DIVIDE([Resultado realizado] - Anterior, ABS(Anterior)))
+
+Mês de referência = SELECTEDVALUE(Corte[Mes], 9)
+
+Receita realizada até corte = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Receita realizada], KEEPFILTERS(Calendario[Mes] <= CorteMes)), 0))
+
+Gastos realizados até corte = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Gastos realizados], KEEPFILTERS(Calendario[Mes] <= CorteMes)), 0))
+
+Resultado realizado até corte = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Resultado realizado], KEEPFILTERS(Calendario[Mes] <= CorteMes)), 0))
+
+Receita orçada restante = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Receita orçada], KEEPFILTERS(Calendario[Mes] > CorteMes)), 0))
+
+Gastos orçados restantes = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Gastos orçados], KEEPFILTERS(Calendario[Mes] > CorteMes)), 0))
+
+Resultado orçado restante = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Resultado orçado], KEEPFILTERS(Calendario[Mes] > CorteMes)), 0))
+
+Receita do mês = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Receita realizada], KEEPFILTERS(Calendario[Mes] = CorteMes)), 0))
+
+Gastos do mês = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Gastos realizados], KEEPFILTERS(Calendario[Mes] = CorteMes)), 0))
+
+Resultado do mês = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Resultado realizado], KEEPFILTERS(Calendario[Mes] = CorteMes)), 0))
+
+Resultado orçado do mês = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Resultado orçado], KEEPFILTERS(Calendario[Mes] = CorteMes)), 0))
+
+Resultado orçado até corte = VAR CorteMes = [Mês de referência] RETURN IF(HASONEVALUE(Calendario[Ano]), COALESCE(CALCULATE([Resultado orçado], KEEPFILTERS(Calendario[Mes] <= CorteMes)), 0))
+
+Receita EAC = [Receita realizada até corte] + [Receita orçada restante]
+
+Gastos EAC = [Gastos realizados até corte] + [Gastos orçados restantes]
+
+Resultado EAC = [Resultado realizado até corte] + [Resultado orçado restante]
+
+Margem EAC = DIVIDE([Resultado EAC], [Receita EAC])
+
+Desvio EAC = IF(NOT ISBLANK([Resultado EAC]), [Resultado EAC] - [Resultado orçado])
+
+Desvio EAC percentual = DIVIDE([Desvio EAC], ABS([Resultado orçado]))
+
+Desvio de gastos EAC = IF(NOT ISBLANK([Gastos EAC]), [Gastos orçados] - [Gastos EAC])
+
+Impacto da receita EAC = IF(NOT ISBLANK([Receita EAC]), [Receita EAC] - [Receita orçada])
+
+Economias de gastos = IF(HASONEVALUE(Calendario[Ano]), SUMX(FILTER(VALUES(Categorias[CategoriaId]), Categorias[CategoriaId] <> "REV"), MAX([Desvio de gastos EAC], 0)))
+
+Aumentos de gastos = IF(HASONEVALUE(Calendario[Ano]), SUMX(FILTER(VALUES(Categorias[CategoriaId]), Categorias[CategoriaId] <> "REV"), MAX(-[Desvio de gastos EAC], 0)))
+
+Margem do mês = DIVIDE([Resultado do mês], [Receita do mês])
+
+Desvio do mês = IF(NOT ISBLANK([Resultado do mês]), [Resultado do mês] - [Resultado orçado do mês])

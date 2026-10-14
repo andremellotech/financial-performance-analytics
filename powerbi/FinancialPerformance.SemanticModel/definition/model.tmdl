@@ -1,0 +1,10 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+
+ref table Financas
+ref table Areas
+ref table Categorias
+ref table Calendario
+ref table Corte

@@ -1,0 +1,39 @@
+table Categorias
+	column CategoriaId
+		dataType: string
+		sourceColumn: CategoriaId
+		summarizeBy: none
+
+	column Categoria
+		dataType: string
+		sourceColumn: Categoria
+		summarizeBy: none
+		sortByColumn: Ordem
+
+	column Natureza
+		dataType: string
+		sourceColumn: Natureza
+		summarizeBy: none
+
+	column Ordem
+		dataType: int64
+		sourceColumn: Ordem
+		summarizeBy: none
+
+	partition Categorias = m
+		mode: import
+		source =
+			let
+			    BinarySource = if Text.Length(pDataFolder) = 0 then Binary.FromText("Y2F0ZWdvcnlfaWQsY2F0ZWdvcnlfbmFtZSxuYXR1cmUsc29ydF9vcmRlcg0KUkVWLFJlY2VpdGEgZGUgc2VydmnDp29zLFJlY2VpdGEsMQ0KRElSLEN1c3RvcyBkaXJldG9zLERlc3Blc2EsMg0KUEVTLFBlc3NvYWwsRGVzcGVzYSwzDQpURUMsVGVjbm9sb2dpYSxEZXNwZXNhLDQNCkNPTSxDb21lcmNpYWwsRGVzcGVzYSw1DQpBRE0sQWRtaW5pc3RyYXRpdm8sRGVzcGVzYSw2DQo=", BinaryEncoding.Base64)
+			        else File.Contents(Text.TrimEnd(pDataFolder, {"/", "\"}) & "/dim_category.csv"),
+			    Raw = Csv.Document(BinarySource, [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Headers = Table.PromoteHeaders(Raw, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Headers, {{"category_id", type text}, {"category_name", type text}, {"nature", type text}, {"sort_order", Int64.Type}}, "en-US"),
+			    ExpectedRaw = Csv.Document(Binary.FromText("Y2F0ZWdvcnlfaWQsY2F0ZWdvcnlfbmFtZSxuYXR1cmUsc29ydF9vcmRlcg0KUkVWLFJlY2VpdGEgZGUgc2VydmnDp29zLFJlY2VpdGEsMQ0KRElSLEN1c3RvcyBkaXJldG9zLERlc3Blc2EsMg0KUEVTLFBlc3NvYWwsRGVzcGVzYSwzDQpURUMsVGVjbm9sb2dpYSxEZXNwZXNhLDQNCkNPTSxDb21lcmNpYWwsRGVzcGVzYSw1DQpBRE0sQWRtaW5pc3RyYXRpdm8sRGVzcGVzYSw2DQo=", BinaryEncoding.Base64), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    ExpectedTyped = Table.TransformColumnTypes(Table.PromoteHeaders(ExpectedRaw, [PromoteAllScalars=true]), {{"category_id", type text}, {"category_name", type text}, {"nature", type text}, {"sort_order", Int64.Type}}, "en-US"),
+			    MatchingRows = List.Count(List.Intersect({Table.ToRows(Typed), Table.ToRows(ExpectedTyped)})),
+			    Checked = if Table.RowCount(Typed) = 6 and Table.RowCount(Table.Distinct(Typed)) = 6 and MatchingRows = 6
+			        then Typed else error "Dimensão inválida: confira cobertura, chaves, rótulos e atributos.",
+			    Renamed = Table.RenameColumns(Checked, {{"category_id", "CategoriaId"}, {"category_name", "Categoria"}, {"nature", "Natureza"}, {"sort_order", "Ordem"}})
+			in
+			    Renamed

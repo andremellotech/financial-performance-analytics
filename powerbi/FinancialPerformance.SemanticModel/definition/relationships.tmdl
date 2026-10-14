@@ -1,0 +1,14 @@
+relationship rel_Areas
+	fromColumn: Financas.AreaId
+	toColumn: Areas.AreaId
+	crossFilteringBehavior: oneDirection
+
+relationship rel_Categorias
+	fromColumn: Financas.CategoriaId
+	toColumn: Categorias.CategoriaId
+	crossFilteringBehavior: oneDirection
+
+relationship rel_Calendario
+	fromColumn: Financas.Data
+	toColumn: Calendario.Data
+	crossFilteringBehavior: oneDirection

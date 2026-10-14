@@ -1,0 +1,14 @@
+let
+    BinarySource = if Text.Length(pDataFolder) = 0 then Binary.FromText("YXJlYV9pZCxhcmVhX25hbWUNCkFOQSxBbmFseXRpY3MNCkVORyxFbmdlbmhhcmlhDQpPUFMsT3BlcmHDp8O1ZXMNCg==", BinaryEncoding.Base64)
+        else File.Contents(Text.TrimEnd(pDataFolder, {"/", "\"}) & "/dim_area.csv"),
+    Raw = Csv.Document(BinarySource, [Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+    Headers = Table.PromoteHeaders(Raw, [PromoteAllScalars=true]),
+    Typed = Table.TransformColumnTypes(Headers, {{"area_id", type text}, {"area_name", type text}}, "en-US"),
+    ExpectedRaw = Csv.Document(Binary.FromText("YXJlYV9pZCxhcmVhX25hbWUNCkFOQSxBbmFseXRpY3MNCkVORyxFbmdlbmhhcmlhDQpPUFMsT3BlcmHDp8O1ZXMNCg==", BinaryEncoding.Base64), [Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+    ExpectedTyped = Table.TransformColumnTypes(Table.PromoteHeaders(ExpectedRaw, [PromoteAllScalars=true]), {{"area_id", type text}, {"area_name", type text}}, "en-US"),
+    MatchingRows = List.Count(List.Intersect({Table.ToRows(Typed), Table.ToRows(ExpectedTyped)})),
+    Checked = if Table.RowCount(Typed) = 3 and Table.RowCount(Table.Distinct(Typed)) = 3 and MatchingRows = 3
+        then Typed else error "Dimensão inválida: confira cobertura, chaves, rótulos e atributos.",
+    Renamed = Table.RenameColumns(Checked, {{"area_id", "AreaId"}, {"area_name", "Area"}})
+in
+    Renamed
