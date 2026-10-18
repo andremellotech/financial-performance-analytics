@@ -2,15 +2,35 @@
 
 **Um caso de análise financeira: do dado ao diagnóstico do resultado.**
 
+![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)
+![Versão 1.0.0](https://img.shields.io/badge/vers%C3%A3o-1.0.0-informational)
+![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?logo=powerbi&logoColor=black)
+![Excel](https://img.shields.io/badge/Excel-217346?logo=microsoftexcel&logoColor=white)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB)
+![Dados fictícios](https://img.shields.io/badge/dados-fict%C3%ADcios-lightgrey)
+
 Projeto de portfólio de [André Mello](https://github.com/andremellotech), com Power BI, Power Query, DAX, Excel e Python.
 
-**Versão 1.0.0** · [Como usar](docs/user-guide.md) · [Guia no navegador](docs/user-guide.html) · [Baixar Excel](excel/FinancialPerformance.xlsx)
+[**Demonstração online**](https://andremellotech.github.io/financial-performance-analytics/) · [Como usar](docs/user-guide.md) · [Guia no navegador](docs/user-guide.html) · [Baixar Excel](excel/FinancialPerformance.xlsx)
 
-[Demonstração online — disponível após ativar Pages](https://andremellotech.github.io/financial-performance-analytics/). A publicação ainda depende do envio do repositório e da ativação do workflow.
+> A demonstração online fica disponível após ativar o GitHub Pages. Até lá, baixe o repositório e abra [preview/index.html](preview/index.html) localmente.
 
 ![Prévia navegável dos dados do projeto](docs/images/dashboard-preview.jpg)
 
 > Dados inteiramente fictícios. A imagem é uma captura da prévia web desta entrega, não do Power BI Desktop. Para dados alterados, abra a prévia atualizada.
+
+## Sumário
+
+- [A pergunta de negócio](#a-pergunta-de-negócio)
+- [Resultado do caso: 2025](#resultado-do-caso-2025)
+- [Explore o projeto](#explore-o-projeto)
+- [O que foi construído](#o-que-foi-construído)
+- [Build-up e projeção de fechamento](#build-up-e-projeção-de-fechamento)
+- [Cenários editáveis](#cenários-editáveis)
+- [Regras financeiras](#regras-financeiras)
+- [Reproduza e valide](#reproduza-e-valide)
+- [Verificação da entrega](#verificação-da-entrega)
+- [Autor e licença](#autor-e-licença)
 
 ## A pergunta de negócio
 
@@ -29,18 +49,21 @@ O relatório organiza indicadores no topo, evolução mensal com pontos de aten�
 | Resultado operacional simplificado | R$ 2.878.442,56 | R$ 2.402.215,62 |
 | Margem | 29,0% | 25,1% |
 
-O desvio do resultado foi **R$ -476.226,94 (-16,5%)**. A área de Engenharia teve o maior desvio desfavorável: R$ -299.083,71. A decomposição separa receita, gastos e compensações. Veja a [análise completa](docs/findings.md).
+O desvio do resultado foi **R$ -476.226,94 (-16,5%)**. A área de Engenharia teve o maior desvio desfavorável: R$ -299.083,71. A decomposição separa receita, gastos e compensações.
 
-Veja também as [recomendações gerenciais](docs/management-actions.md): achados, hipóteses a investigar, dados necessários e ações sugeridas. São propostas sobre o caso fictício, sem economias ou decisões atribuídas a uma empresa real.
+- [Análise completa](docs/findings.md)
+- [Recomendações gerenciais](docs/management-actions.md): achados, hipóteses a investigar, dados necessários e ações sugeridas. São propostas sobre o caso fictício, sem economias ou decisões atribuídas a uma empresa real.
 
 ## Explore o projeto
 
-- **Prévia navegável:** baixe o repositório e abra [preview/index.html](preview/index.html). As sete perspectivas e os filtros funcionam localmente, sem CDN ou servidor.
-- **Power BI:** abra [FinancialPerformance.pbip](powerbi/FinancialPerformance.pbip) no Desktop e clique em **Atualizar** para carregar os dados embarcados. Consulte o [guia do Power BI](docs/powerbi-guide.md).
-- **Excel:** abra [FinancialPerformance.xlsx](excel/FinancialPerformance.xlsx) e selecione ano em B3, área em E3 e mês em H3 na aba Painel. Os filtros alimentam Build-up e Projeção. Consulte o [guia do Excel](docs/excel-guide.md).
-- **Dados:** [fatos financeiros](data/fact_finance.csv), [dicionário](docs/data-dictionary.md) e [premissas](docs/assumptions.md).
+| Quero... | Abra |
+| :--- | :--- |
+| Ver a prévia navegável | [preview/index.html](preview/index.html), após baixar o repositório. As sete perspectivas e os filtros funcionam localmente, sem CDN ou servidor |
+| Editar o relatório | [FinancialPerformance.pbip](powerbi/FinancialPerformance.pbip) no Power BI Desktop; clique em **Atualizar** para carregar os dados embarcados. Veja o [guia do Power BI](docs/powerbi-guide.md) |
+| Usar a planilha | [FinancialPerformance.xlsx](excel/FinancialPerformance.xlsx): na aba Painel, selecione ano em B3, área em E3 e mês em H3. Os filtros alimentam Build-up e Projeção. Veja o [guia do Excel](docs/excel-guide.md) |
+| Consultar os dados | [Fatos financeiros](data/fact_finance.csv), [dicionário](docs/data-dictionary.md) e [premissas](docs/assumptions.md) |
 
-O GitHub apresenta o código do HTML. Para usar a prévia, abra o arquivo localmente ou publique pelo GitHub Pages conforme o [guia de publicação](docs/publish-guide.md).
+> O GitHub exibe o código do HTML. Para usar a prévia, abra o arquivo localmente ou publique pelo GitHub Pages conforme o [guia de publicação](docs/publish-guide.md).
 
 ## O que foi construído
 
@@ -62,9 +85,11 @@ flowchart LR
     C --> W[Prévia navegável]
 ~~~
 
-O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos legíveis para revisão no GitHub. Veja as [medidas DAX](powerbi/measures.dax) e [consultas M](powerbi/queries/).
+O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos legíveis para revisão no GitHub. Veja as [medidas DAX](powerbi/measures.dax) e as [consultas M](powerbi/queries/).
 
 ## Build-up e projeção de fechamento
+
+O Build-up compõe os gastos por categoria e separa realizado até o corte e projeção restante. A aba Motivadores organiza economias e aumentos de gastos, com a receita separada para conciliar o desvio do resultado. A Visão mensal mostra o mês escolhido e o acumulado de janeiro até ele.
 
 <details>
 <summary>Ver o Build-up da prévia</summary>
@@ -73,11 +98,13 @@ O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais 
 
 </details>
 
-O Build-up compõe os gastos por categoria e separa realizado até o corte e projeção restante. A aba Motivadores organiza economias e aumentos de gastos, com a receita separada para conciliar o desvio do resultado. A Visão mensal mostra o mês escolhido e o acumulado de janeiro até ele.
+**EAC hipotético = realizado até o mês de referência + orçamento dos meses seguintes.**
 
-**EAC hipotético = realizado até o mês de referência + orçamento dos meses seguintes.** Valores realizados após o corte não entram na estimativa. A referência inicial é setembro, e o seletor permite qualquer mês do ano. Em dezembro, a parcela projetada é zero e o EAC corresponde ao realizado anual.
+- Valores realizados após o corte não entram na estimativa.
+- A referência inicial é setembro, e o seletor permite qualquer mês do ano.
+- Em dezembro, a parcela projetada é zero e o EAC corresponde ao realizado anual.
 
-No exemplo de 2025 com corte em setembro, o resultado EAC é **R$ 2.524.963,98**, contra R$ 2.878.442,56 orçados. Os gastos EAC são R$ 7.116.106,45. Os gastos EAC ficam R$ 68.885,01 acima do orçamento. Isso é uma simulação de fechamento, distinta da análise do realizado anual acima.
+No exemplo de 2025 com corte em setembro, o resultado EAC é **R$ 2.524.963,98**, contra R$ 2.878.442,56 orçados. Os gastos EAC são R$ 7.116.106,45, ou R$ 68.885,01 acima do orçamento. Isso é uma simulação de fechamento, distinta da análise do realizado anual acima.
 
 <details>
 <summary>Ver a projeção de fechamento</summary>
@@ -86,7 +113,7 @@ No exemplo de 2025 com corte em setembro, o resultado EAC é **R$ 2.524.963,98**
 
 </details>
 
-Carryover, risco de não execução, compromissos de contratos e revisão manual de forecast não são estimados por esta base. As explicações dos motivadores descrevem as premissas fictícias, sem atribuir causalidade a dados corporativos.
+> Carryover, risco de não execução, compromissos de contratos e revisão manual de forecast não são estimados por esta base. As explicações dos motivadores descrevem as premissas fictícias, sem atribuir causalidade a dados corporativos.
 
 ## Cenários editáveis
 
@@ -104,17 +131,17 @@ Na prévia e no Excel, Base, Otimista e Conservativo selecionam premissas de rec
 
 Receitas são positivas; custos e despesas são negativos na base. O resultado é a soma dos valores. O indicador de gastos exibe sua magnitude positiva.
 
-- Desvio do resultado = realizado − orçado; positivo é favorável.
-- Desvio percentual = desvio / resultado orçado absoluto.
-- Margem = resultado / receita no mesmo período e área.
-- Comparação anual = realizado do ano anterior, com a mesma área.
+- **Desvio do resultado** = realizado − orçado; positivo é favorável.
+- **Desvio percentual** = desvio / resultado orçado absoluto.
+- **Margem** = resultado / receita no mesmo período e área.
+- **Comparação anual** = realizado do ano anterior, com a mesma área.
 - Sem denominador ou comparável, o indicador fica vazio, representado por — na prévia.
 
 Não há impostos, resultado financeiro, depreciação ou integração com SAP nesta versão.
 
 ## Reproduza e valide
 
-Python 3.11+, Node.js 24 para os testes da prévia e Power BI Desktop recente para editar o relatório.
+Requer Python 3.11+, Node.js 24 para os testes da prévia e Power BI Desktop recente para editar o relatório.
 
 ~~~sh
 python -m pip install -r scripts/requirements.txt
@@ -129,20 +156,26 @@ node tests/test_preview.js
 node tests/test_scenarios.js
 ~~~
 
-A semente 42 reproduz a mesma base. O workflow roda os testes e verifica divergências nos materiais gerados. A planilha não é reconstruída pelos comandos Python: atualize a Base conforme o guia do Excel.
+A semente 42 reproduz a mesma base. O workflow roda os testes e verifica divergências nos materiais gerados.
 
-Para reconstruir a partir de CSV já editados, execute **python scripts/build_all.py**. Esse comando preserva os CSV e renova o projeto, a prévia e os textos. O gerador de dados é uma ação separada que restaura a simulação original. As capturas do README são imagens desta entrega e não são renovadas pelo workflow.
+- **Reconstruir a partir de CSV já editados:** execute `python scripts/build_all.py`. O comando preserva os CSV e renova o projeto, a prévia e os textos.
+- **Restaurar a simulação original:** o gerador de dados (`generate_data.py`) é uma ação separada.
+- **Excel:** a planilha não é reconstruída pelos comandos Python. Atualize a Base conforme o guia do Excel.
+- **Capturas do README:** são imagens desta entrega e não são renovadas pelo workflow.
 
 ## Verificação da entrega
 
-Cálculos Python, JavaScript e Excel reconciliados nos oito filtros anuais e nos 96 recortes de EAC por ano/área/mês. Os resumos mensal e acumulado também reconciliam. JSON Power BI validado contra esquemas Microsoft; modelo TMDL aceito pelo parser oficial. Consulte a [verificação da entrega](docs/verification.md).
+- Cálculos Python, JavaScript e Excel reconciliados nos oito filtros anuais e nos 96 recortes de EAC por ano/área/mês.
+- Resumos mensal e acumulado também reconciliam.
+- Os três cenários iniciais foram comparados em 288 recortes de ano/área/mês.
+- JSON do Power BI validado contra esquemas Microsoft; modelo TMDL aceito pelo parser oficial.
 
-Os três cenários iniciais foram comparados em 288 recortes de ano/área/mês. Consulte também a [validação nos aplicativos](docs/native-validation.md), o [histórico de versões](CHANGELOG.md) e as [notas para publicar v1.0.0](docs/release-notes.md). A versão identifica o pacote local; a Release no GitHub ainda não foi publicada.
+Veja a [verificação da entrega](docs/verification.md), a [validação nos aplicativos](docs/native-validation.md), o [histórico de versões](CHANGELOG.md) e as [notas para publicar v1.0.0](docs/release-notes.md). A versão identifica o pacote local; a Release no GitHub ainda não foi publicada.
 
-**Abertura visual, execução DAX e atualização M no Power BI Desktop ainda precisam de validação no aplicativo.** Validação de arquivos não confirma a renderização nativa. A planilha também não foi aberta no Microsoft Excel.
+> **Limites da validação:** abertura visual, execução DAX e atualização M no Power BI Desktop ainda precisam de validação no aplicativo. Validação de arquivos não confirma a renderização nativa. A planilha também não foi aberta no Microsoft Excel.
 
 ## Autor e licença
 
-[André Mello](https://www.linkedin.com/in/aamello/) · [GitHub](https://github.com/andremellotech)
+[André Mello no LinkedIn](https://www.linkedin.com/in/aamello/) · [GitHub](https://github.com/andremellotech)
 
 Código e dados fictícios sob [MIT](LICENSE). Os esquemas Microsoft mantêm a [licença de origem](docs/schemas/LICENSE).
