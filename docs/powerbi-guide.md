@@ -1,6 +1,6 @@
 # Abrir e atualizar o Power BI
 
-1. Extraia o pacote completo e mantenha as pastas juntas.
+1. Extraia `downloads/FinancialPerformance-PowerBI.zip` na raiz do repositório (ou em uma pasta vazia). Alternativamente execute `python scripts/package_assets.py extract`. O ZIP preserva os 111 arquivos nativos e seus caminhos; nenhuma definição PBIP/TMDL/PBIR foi mesclada.
 2. Abra powerbi/FinancialPerformance.pbip no Power BI Desktop recente.
 3. Clique em **Atualizar** para carregar os CSV embarcados. O projeto contém definições, não um cache pré-carregado.
 4. O ano começa em 2025. Os filtros de ano e área estão sincronizados nas sete páginas. Build-up, Motivadores, Mensal e Projeção compartilham o mês de referência, inicialmente setembro.

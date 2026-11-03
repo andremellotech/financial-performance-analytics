@@ -1,0 +1,6 @@
+/powerbi/
+/data/dashboard.json
+/_site/
+__pycache__/
+*.py[cod]
+*.inspect.ndjson

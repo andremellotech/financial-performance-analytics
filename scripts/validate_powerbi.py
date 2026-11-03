@@ -1,4 +1,6 @@
 import json
+import tempfile
+import zipfile
 from pathlib import Path
 from jsonschema import Draft7Validator
 from referencing import Registry, Resource
@@ -7,9 +9,12 @@ ROOT=Path(__file__).resolve().parents[1]
 def validate_powerbi(output_dir):
     resources=[];schemas={}
     schema_root=ROOT/"docs/schemas"
-    for file in schema_root.rglob("*.json"):
-        obj=json.loads(file.read_text(encoding="utf-8"));uri=obj["$id"]
-        file_uri="https://developer.microsoft.com/json-schemas/"+file.relative_to(schema_root).as_posix()
+    with zipfile.ZipFile(schema_root/"schemas.zip") as archive:
+        schema_objects = [(name.removeprefix("docs/schemas/"), json.loads(archive.read(name)))
+                          for name in archive.namelist() if name.endswith(".json")]
+    for name, obj in schema_objects:
+        uri=obj["$id"]
+        file_uri="https://developer.microsoft.com/json-schemas/"+name
         schemas[file_uri]=obj;resources.append((file_uri,Resource.from_contents(obj)))
         if uri==file_uri:schemas[uri]=obj
     registry=Registry().with_resources(resources)
@@ -36,4 +41,11 @@ def validate_powerbi(output_dir):
                 if prop not in valid:raise ValueError(f"Campo desconhecido: {table}.{prop}")
     print("Esquemas Microsoft e referências de campos válidos.")
 
-if __name__=="__main__":validate_powerbi(ROOT/"powerbi")
+if __name__=="__main__":
+    if (ROOT/"powerbi/FinancialPerformance.pbip").exists():
+        validate_powerbi(ROOT/"powerbi")
+    else:
+        from package_assets import extract_archive, POWERBI_ARCHIVE
+        with tempfile.TemporaryDirectory() as directory:
+            extract_archive(ROOT/POWERBI_ARCHIVE, directory)
+            validate_powerbi(Path(directory)/"powerbi")

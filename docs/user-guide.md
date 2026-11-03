@@ -58,7 +58,7 @@ Base contém os registros originais. Não substitua fórmulas por valores. Para 
 
 ## 7. Use o Power BI
 
-Abra powerbi/FinancialPerformance.pbip no Power BI Desktop. Atualize os dados embarcados, selecione um ano e uma área e percorra as sete páginas. Nas páginas com corte, selecione um mês por vez. O EAC nativo usa o caso Base; os ajustes editáveis de cenários estão na prévia e no Excel.
+Extraia downloads/FinancialPerformance-PowerBI.zip na raiz (ou execute **python scripts/package_assets.py extract**) e abra powerbi/FinancialPerformance.pbip no Power BI Desktop. Atualize os dados embarcados, selecione um ano e uma área e percorra as sete páginas. Nas páginas com corte, selecione um mês por vez. O EAC nativo usa o caso Base; os ajustes editáveis de cenários estão na prévia e no Excel.
 
 Antes de usar capturas como evidência do Power BI, confirme renderização, atualização M e medidas DAX conforme native-validation.md. Consulte powerbi-guide.md para usar uma pasta externa de CSV.
 

@@ -59,7 +59,7 @@ O desvio do resultado foi **R$ -476.226,94 (-16,5%)**. A área de Engenharia tev
 | Quero... | Abra |
 | :--- | :--- |
 | Ver a prévia navegável | [preview/index.html](preview/index.html), após baixar o repositório. As sete perspectivas e os filtros funcionam localmente, sem CDN ou servidor |
-| Editar o relatório | [FinancialPerformance.pbip](powerbi/FinancialPerformance.pbip) no Power BI Desktop; clique em **Atualizar** para carregar os dados embarcados. Veja o [guia do Power BI](docs/powerbi-guide.md) |
+| Editar o relatório | [pacote Power BI](downloads/FinancialPerformance-PowerBI.zip) após extrair o ZIP e abrir `powerbi/FinancialPerformance.pbip` no Power BI Desktop; clique em **Atualizar** para carregar os dados embarcados. Veja o [guia do Power BI](docs/powerbi-guide.md) |
 | Usar a planilha | [FinancialPerformance.xlsx](excel/FinancialPerformance.xlsx): na aba Painel, selecione ano em B3, área em E3 e mês em H3. Os filtros alimentam Build-up e Projeção. Veja o [guia do Excel](docs/excel-guide.md) |
 | Consultar os dados | [Fatos financeiros](data/fact_finance.csv), [dicionário](docs/data-dictionary.md) e [premissas](docs/assumptions.md) |
 
@@ -85,7 +85,7 @@ flowchart LR
     C --> W[Prévia navegável]
 ~~~
 
-O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos legíveis para revisão no GitHub. Veja as [medidas DAX](powerbi/measures.dax) e as [consultas M](powerbi/queries/).
+O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos nativos legíveis. O [ZIP Power BI](downloads/FinancialPerformance-PowerBI.zip) preserva os 111 arquivos, seus caminhos, medidas DAX e consultas M. Extraia-o na raiz ou execute `python scripts/package_assets.py extract` para revisar e editar o projeto.
 
 ## Build-up e projeção de fechamento
 
@@ -104,7 +104,7 @@ O Build-up compõe os gastos por categoria e separa realizado até o corte e pro
 - A referência inicial é setembro, e o seletor permite qualquer mês do ano.
 - Em dezembro, a parcela projetada é zero e o EAC corresponde ao realizado anual.
 
-No exemplo de 2025 com corte em setembro, o resultado EAC é **R$ 2.524.963,98**, contra R$ 2.878.442,56 orçados. Os gastos EAC são R$ 7.116.106,45, ou R$ 68.885,01 acima do orçamento. Isso é uma simulação de fechamento, distinta da análise do realizado anual acima.
+No exemplo de 2025 com corte em setembro, o resultado EAC é **R$ 2.524.963,98**, contra R$ 2.878.442,56 orçados. Os gastos EAC são R$ 7.116.106,45. Os gastos EAC ficam R$ 68.885,01 acima do orçamento. Isso é uma simulação de fechamento, distinta da análise do realizado anual acima.
 
 <details>
 <summary>Ver a projeção de fechamento</summary>
@@ -146,11 +146,8 @@ Requer Python 3.11+, Node.js 24 para os testes da prévia e Power BI Desktop rec
 ~~~sh
 python -m pip install -r scripts/requirements.txt
 python scripts/generate_data.py
-python scripts/validate_data.py
-python scripts/build_powerbi.py
+python scripts/build_all.py
 python scripts/validate_powerbi.py
-python scripts/build_preview.py
-python scripts/build_docs.py
 python -m unittest discover -s tests
 node tests/test_preview.js
 node tests/test_scenarios.js

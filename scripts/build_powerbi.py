@@ -30,7 +30,7 @@ from eac_dax import EXTRA_MEASURES,AUX_COLUMNS,cutoff_query
 MEASURES.update(EXTRA_MEASURES)
 
 def write(path,text):
-    path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text,encoding="utf-8")
+    path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text,encoding="utf-8",newline="\r\n")
 def dump(path,obj):
     write(path,json.dumps(obj,ensure_ascii=False,indent=2)+"\n")
 def schema(kind,version):

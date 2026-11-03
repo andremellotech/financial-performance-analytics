@@ -59,7 +59,7 @@ Veja também as [recomendações gerenciais](docs/management-actions.md): achado
 ## Explore o projeto
 
 - **Prévia navegável:** baixe o repositório e abra [preview/index.html](preview/index.html). As sete perspectivas e os filtros funcionam localmente, sem CDN ou servidor.
-- **Power BI:** abra [FinancialPerformance.pbip](powerbi/FinancialPerformance.pbip) no Desktop e clique em **Atualizar** para carregar os dados embarcados. Consulte o [guia do Power BI](docs/powerbi-guide.md).
+- **Power BI:** abra [pacote Power BI](downloads/FinancialPerformance-PowerBI.zip) após extrair o ZIP e abrir `powerbi/FinancialPerformance.pbip` no Desktop; clique em **Atualizar** para carregar os dados embarcados. Consulte o [guia do Power BI](docs/powerbi-guide.md).
 - **Excel:** abra [FinancialPerformance.xlsx](excel/FinancialPerformance.xlsx) e selecione ano em B3, área em E3 e mês em H3 na aba Painel. Os filtros alimentam Build-up e Projeção. Consulte o [guia do Excel](docs/excel-guide.md).
 - **Dados:** [fatos financeiros](data/fact_finance.csv), [dicionário](docs/data-dictionary.md) e [premissas](docs/assumptions.md).
 
@@ -85,7 +85,7 @@ flowchart LR
     C --> W[Prévia navegável]
 ~~~
 
-O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos legíveis para revisão no GitHub. Veja as [medidas DAX](powerbi/measures.dax) e [consultas M](powerbi/queries/).
+O modelo usa PBIP, TMDL e PBIR para manter tabelas, medidas, páginas e visuais em arquivos nativos legíveis. O [ZIP Power BI](downloads/FinancialPerformance-PowerBI.zip) preserva os 111 arquivos, seus caminhos, medidas DAX e consultas M. Extraia-o na raiz ou execute `python scripts/package_assets.py extract` para revisar e editar o projeto.
 
 ## Build-up e projeção de fechamento
 
@@ -142,11 +142,8 @@ Python 3.11+, Node.js 24 para os testes da prévia e Power BI Desktop recente pa
 ~~~sh
 python -m pip install -r scripts/requirements.txt
 python scripts/generate_data.py
-python scripts/validate_data.py
-python scripts/build_powerbi.py
+python scripts/build_all.py
 python scripts/validate_powerbi.py
-python scripts/build_preview.py
-python scripts/build_docs.py
 python -m unittest discover -s tests
 node tests/test_preview.js
 node tests/test_scenarios.js
@@ -206,7 +203,17 @@ O resultado ficou {pct(s['yoy_pct'])} frente ao realizado de 2024. Crescimento d
 
 A base mensal agregada não contém contratos, preços, horas ou volumes para responder essas perguntas. As premissas do gerador são fictícias, estão documentadas em assumptions.md e não representam causalidade estimada de uma operação real.
 """
-    (ROOT/"README.md").write_text(readme,encoding="utf-8")
+    current = ROOT/"README.md"
+    if current.exists():
+        readme = current.read_text(encoding="utf-8")
+        readme = re.sub(r"(## Resultado do caso: 2025\n\n).*?(\n\nO desvio do resultado foi)",
+                        lambda m: m[1] + "| Indicador | Orçado | Realizado |\n| :--- | ---: | ---: |\n" + metric_rows + m[2],
+                        readme, flags=re.S)
+        readme = re.sub(r"O desvio do resultado foi \*\*.*?\*\*\. .*? A decomposição",
+                        lambda m: f"O desvio do resultado foi **{money(s['variance'])} ({pct(s['variance_pct'])})**. {area_note} A decomposição", readme)
+        readme = re.sub(r"No exemplo de 2025 com corte em setembro,.*?(?=\n\n)",
+                        lambda m: f"No exemplo de 2025 com corte em setembro, o resultado EAC é **{money(eac['eac']['result'])}**, contra {money(eac['budget']['result'])} orçados. Os gastos EAC são {money(eac['eac']['expenses'])}. {expense_eac_note} Isso é uma simulação de fechamento, distinta da análise do realizado anual acima.", readme)
+    current.write_text(readme,encoding="utf-8",newline="\r\n")
     (ROOT/"docs").mkdir(exist_ok=True)
     (ROOT/"docs/findings.md").write_text(findings,encoding="utf-8")
     build_user_guide()

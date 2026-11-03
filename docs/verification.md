@@ -39,3 +39,14 @@ O EAC Base é hipotético: realizado até o mês de referência mais orçamento 
 A planilha usa a base desta entrega e sua atualização é manual. A prévia HTML e os textos podem ser reconstruídos dos CSV. Capturas não são renovadas pelo workflow. A publicação e a execução do workflow no GitHub dependem do envio do repositório.
 
 O pacote é local, sem credenciais, caminhos pessoais ou dependência das bibliotecas de autoria. As consultas permitem informar a pasta dos CSV ou usar os dados fictícios embarcados.
+
+
+## Pacotes compactos e reprodução
+
+O projeto nativo foi consolidado em `downloads/FinancialPerformance-PowerBI.zip`: 111 entradas com os caminhos originais sob `powerbi/`. Extraia antes de abrir o PBIP. A extração Python preserva edições locais e recusa sobrescritas diferentes; use uma pasta vazia para outra cópia. Para republicar alterações feitas no Desktop, execute `python scripts/package_assets.py package` antes de enviar o ZIP. `build_all.py` reconstrói o modelo a partir dos CSV e substitui o pacote; não o execute sobre edições nativas que queira preservar sem antes salvá-las.
+
+Os 17 JSON oficiais de esquema estão em `docs/schemas/schemas.zip`, com caminhos `docs/schemas/fabric/...` e a licença Microsoft mantida em `docs/schemas/LICENSE`. O validador lê os JSON diretamente do ZIP, sem rede. As dez capturas adicionais da entrega estão preservadas, sem recompressão de imagem, em `docs/images/screenshots.zip`, com seus nomes e caminhos originais; as três imagens usadas no README continuam diretamente acessíveis. Para extrair qualquer pacote de apoio: `python scripts/package_assets.py extract --archive docs/images/screenshots.zip --destination .` (troque o arquivo para os esquemas).
+
+`data/dashboard.json` é derivado dos CSV por `build_preview.py` e ignorado pelo Git. O mesmo objeto de dados, referências financeiras e cenários está embarcado em `preview/index.html`, que continua funcionando offline. Execute `python scripts/build_all.py` antes dos testes em uma cópia recém-baixada. O README mantém seus textos editoriais ao renovar os números calculados.
+
+`python scripts/build_site.py` prepara somente sete dependências públicas: página inicial, prévia autossuficiente, guia HTML, Excel, CSV financeiro, ZIP Power BI e licença. Código, esquemas, capturas adicionais e referências de teste permanecem no repositório, fora do artefato Pages. A documentação completa está ligada ao GitHub.

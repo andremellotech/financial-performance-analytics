@@ -4,7 +4,7 @@ Status desta entrega: validação estrutural e cálculos de referência executad
 
 ## Power BI Desktop
 
-1. Abra powerbi/FinancialPerformance.pbip no Desktop recente.
+1. Extraia `downloads/FinancialPerformance-PowerBI.zip` (ou execute `python scripts/package_assets.py extract`) e abra powerbi/FinancialPerformance.pbip no Desktop recente.
 2. Clique em Atualizar. Confirme que as consultas embarcadas carregam sem erro.
 3. Confira as sete páginas, títulos, filtros e ausência de sobreposição.
 4. Selecione 2025/Todas e compare receita, gastos e resultado anual com a tabela do README.

@@ -29,11 +29,7 @@ jobs:
       - run: node tests/test_scenarios.js
       - uses: actions/configure-pages@v5
       - name: Prepare static site
-        run: |
-          mkdir -p _site
-          cp index.html README.md LICENSE _site/
-          cp -r preview docs excel data _site/
-          find _site -type f -name '*.inspect.ndjson' -delete
+        run: python scripts/build_site.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
